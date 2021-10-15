@@ -1,0 +1,103 @@
+Conexão:
+mongodb://localhost:27017
+
+
+C:\>cd "Program Files"
+
+C:\Program Files>cd MongoDB
+
+C:\Program Files\MongoDB>cd Server
+
+C:\Program Files\MongoDB\Server>cd 4.4
+
+C:\Program Files\MongoDB\Server\4.4>cd bin
+
+C:\Program Files\MongoDB\Server\4.4\bin>mongo
+
+MongoDB shell version v4.4.2
+connecting to: .........
+
+......
+......
+......
+......
+
+
+> use empresa
+switched to db empresa
+
+> db.funcionario.insertOne({"Cpf": "123123123", "Primeiro_Nome": "João", "Ultimo_Nome": "Silva", "Salario": 14000, "Data_Nascimento": new Date("1992-02-14")})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("616099aaaea0eda88a660de6")
+}
+
+> db.funcionario.insertOne({"_id":"456456456", "Cpf":"456456456", "Primeiro_Nome":"Carmem", "Ultimo_Nome":"Alcantara", "Salario": 8000, "Data_Nascimento": new Date(1962-07-18), "Sexo":"F"})
+{ "acknowledged" : true, "insertedId" : "456456456" }
+
+> db.funcionario.insertMany([{"Cpf": "33344555587", "Sexo": "M", "Salario": 40000, "Endereco": "Rua da Lapa 34 São Paulo SP", "Nome_Meio": "T", "Dependentes": [{"Sexo": "F", "Parentesco": "Filha", "Data_Nascimento": new Date ("1986-01-05"), "Nome_Dependente": "Alicia"}, {"Sexo": "F", "Parentesco": "Esposa", "Data_Nascimento": new Date ("1958-01-03"), "Nome_Dependente": "Janaína"}, {"Sexo": "M", "Parentesco": "Filho", "Data_Nascimento": new Date ("1983-01-25"), "Nome_Dependente": "Tiago"}], "Ultimo_Nome": "Wong", "Primeiro_Nome": "Fernando", "Cpf_Supervisor": "88866555576", "Data_Nascimento": new Date ("1955-01-12"), "Numero_Departamento": "5"},
+... {"Cpf": "44111555587", "Sexo": "M", "Salario": 31000, "Endereco": "Rua Rodrigues Alves 771 Rio de Janeiro RJ", "Nome_Meio": "V", "Dependentes": [{"Sexo": "F", "Parentesco": "Esposa", "Data_Nascimento": new Date ("1986-01-07"), "Nome_Dependente": "Joaquina"}], "Ultimo_Nome": "Teixiera", "Primeiro_Nome": "Ubiratan", "Cpf_Supervisor": "88866555576", "Data_Nascimento": new Date ("1984-01-15"), "Numero_Departamento": "5"}])
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("6169babc6bf62c6f1129403c"),
+                ObjectId("6169babc6bf62c6f1129403d")
+        ]
+}
+
+> db.funcionario.find({})
+{
+		encontra todo o conteúdo da coleção
+}
+
+> db.funcionario.find({}, {"_id": 0})
+{
+		mostra todos sem id -> 0 para falso
+}
+
+> db.funcionario.find({}, {"_id":0, "Primeiro_Nome": 1, "Ultimo_Nome": 1})
+{
+		mostra todos nomes sem id -> 1 para verdadeiro
+}
+
+> db.funcionario.find({}, {"_id":0, "Primeiro_Nome": 1, "Ultimo_Nome": 1, "Dependentes.Nome_Dependente": 1})
+
+> db.funcionario.find({}, {"_id":0, "Primeiro_Nome": 1, "Ultimo_Nome": 1}).limit(5)
+
+{
+		mostra 5 resultados
+}
+
+> db.funcionario.find({}, {"_id":0, "Primeiro_Nome": 1, "Ultimo_Nome": 1}).sort({"Primeiro_Nome": 1})
+{
+		mostra todos ordenado pelo nome - ascendente
+}
+
+> db.funcionario.find({}, {"_id":0, "Primeiro_Nome": 1, "Ultimo_Nome": 1}).sort({"Primeiro_Nome": -1})
+{
+		mostra todos ordenado pelo nome - descendente
+}
+
+> db.funcionario.find({"Sexo": "M"}, {"_id":0, "Primeiro_Nome": 1, "Ultimo_Nome": 1})
+{
+		primeiro parâmetro é filtro
+}
+
+> db.funcionario.find({"Salario": {$gte: 31000}}, {"_id": 0, "Primeiro_Nome": 1, "Ultimo_Nome": 1, "Salario": 1})
+{	
+		filtros (gt, gte, lt, lte)
+}
+
+> db.funcionario.find({"Data_Nascimento": {$gte: new Date("1990-01-01")}}, {"_id": 0, "Primeiro_Nome": 1, "Ultimo_Nome": 1, "Data_Nascimento": 1})
+
+> db.funcionario.find({"Primeiro_Nome": {$in: ["Fatima", "Tonico"]}}, {"_id": 0, "Primeiro_Nome": 1, "Ultimo_Nome": 1, "Data_Nascimento": 1})
+
+> db.funcionario.find({"Sexo": "M", "Salario": {$gte: 31000}}, {"_id": 0, "Primeiro_Nome": 1, "Ultimo_Nome": 1, "Salario": 1})
+> db.funcionario.find({$and: [{"Sexo": "M"}, {"Salario": {$gte: 31000}}]}, {"_id": 0, "Primeiro_Nome": 1, "Ultimo_Nome": 1, "Salario": 1})
+
+> db.funcionario.find({$or: [{"Sexo": "M"}, {"Salario": {$gte: 31000}}]}, {"_id": 0, "Primeiro_Nome": 1, "Ultimo_Nome": 1, "Salario": 1})
+
+DESAFIO
+
+> db.funcionario.find({Dependentes: {$exists: false}}, {"_id": 0, "Primeiro_Nome": 1, "Nome_Meio": 1, "Ultimo_Nome": 1})
+
